@@ -1,51 +1,47 @@
 'use strict';
 
-var OFFER_TITLES = [
-  'Большая уютная квартира',
-  'Маленькая неуютная квартира',
-  'Огромный прекрасный дворец',
-  'Маленький ужасный дворец',
-  'Красивый гостевой домик',
-  'Некрасивый негостеприимный домик',
-  'Уютное бунгало далеко от моря',
-  'Неуютное бунгало по колено в воде'
-];
+function generateAdverts(count) {
+  var OFFER_TITLES = [
+    'Большая уютная квартира',
+    'Маленькая неуютная квартира',
+    'Огромный прекрасный дворец',
+    'Маленький ужасный дворец',
+    'Красивый гостевой домик',
+    'Некрасивый негостеприимный домик',
+    'Уютное бунгало далеко от моря',
+    'Неуютное бунгало по колено в воде'
+  ];
 
-var OFFER_TYPES = [
-  'flat',
-  'house',
-  'bungalo'
-];
+  var OFFER_TYPES = [
+    'flat',
+    'house',
+    'bungalo'
+  ];
 
-var CHECKINS_OR_CHECKOUTS = [
-  '12:00',
-  '13:00',
-  '14:00'
-];
+  var CHECKINS_OR_CHECKOUTS = [
+    '12:00',
+    '13:00',
+    '14:00'
+  ];
 
-var FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner'
-];
+  var FEATURES = [
+    'wifi',
+    'dishwasher',
+    'parking',
+    'washer',
+    'elevator',
+    'conditioner'
+  ];
 
-var adverts = [];
+  var adverts = [];
 
-var pinMapElement = document.querySelector('.tokyo__pin-map');
-var lodgeTemplate = document.querySelector('#lodge-template').content;
+  function getRandomInteger(min, max) {
+    var rand = min + Math.random() * (max + 1 - min);
+    rand = Math.floor(rand);
+    return rand;
+  }
 
-function getRandomInteger(min, max) {
-  var rand = min + Math.random() * (max + 1 - min);
-  rand = Math.floor(rand);
-  return rand;
-}
-
-function createAdverts(j) {
-
-  for (var i = 0; i < j; i++) {
+  for (var i = 0; i < count; i++) {
     var coordinateX = getRandomInteger(300, 900);
     var coordinateY = getRandomInteger(100, 500);
     adverts[i] = {
@@ -75,15 +71,16 @@ function createAdverts(j) {
 }
 
 function appendPins() {
+  var pinMapElement = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
   var pinWidth = 40;
   var pinHeight = 40;
-  for (var i = 0; i < adverts.length; i++) {
+  for (var i = 0; i < generateAdverts(8).length; i++) {
     var newPinElement = document.createElement('div');
     newPinElement.className = 'pin';
     newPinElement.innerHTML = '<img>';
-    newPinElement.setAttribute('style', 'left: ' + (adverts[i].location.x - pinWidth / 2) + 'px; top: ' + (adverts[i].location.y - pinHeight) + 'px');
-    newPinElement.querySelector('img').setAttribute('src', adverts[i].author.avatar);
+    newPinElement.setAttribute('style', 'left: ' + (generateAdverts(8)[i].location.x - pinWidth / 2) + 'px; top: ' + (generateAdverts(8)[i].location.y - pinHeight) + 'px');
+    newPinElement.querySelector('img').setAttribute('src', generateAdverts(8)[i].author.avatar);
     newPinElement.querySelector('img').setAttribute('width', String(pinWidth));
     newPinElement.querySelector('img').setAttribute('height', String(pinHeight));
     newPinElement.querySelector('img').className = 'rounded';
@@ -93,6 +90,7 @@ function appendPins() {
 }
 
 function createLodgeElement(advert) {
+  var lodgeTemplate = document.querySelector('#lodge-template').content;
   var lodgeElement = lodgeTemplate.cloneNode(true);
   lodgeElement.querySelector('.lodge__title').textContent = advert.offer.title;
   lodgeElement.querySelector('.lodge__address').textContent = advert.offer.address;
@@ -127,6 +125,5 @@ function switchDialog(advert) {
   document.querySelector('#offer-dialog').appendChild(createLodgeElement(advert));
 }
 
-createAdverts(8);
 appendPins();
-switchDialog(adverts[0]);
+switchDialog(generateAdverts(8)[0]);
