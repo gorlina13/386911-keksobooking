@@ -1,6 +1,12 @@
 'use strict';
 
-function generateAdverts(count) {
+function getRandomInteger(min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+  rand = Math.floor(rand);
+  return rand;
+}
+
+function generateAdverts(advertsCount) {
   var OFFER_TITLES = [
     'Большая уютная квартира',
     'Маленькая неуютная квартира',
@@ -35,13 +41,7 @@ function generateAdverts(count) {
 
   var adverts = [];
 
-  function getRandomInteger(min, max) {
-    var rand = min + Math.random() * (max + 1 - min);
-    rand = Math.floor(rand);
-    return rand;
-  }
-
-  for (var i = 0; i < count; i++) {
+  for (var i = 0; i < advertsCount; i++) {
     var coordinateX = getRandomInteger(300, 900);
     var coordinateY = getRandomInteger(100, 500);
     adverts[i] = {
@@ -75,18 +75,22 @@ function appendPins() {
   var fragment = document.createDocumentFragment();
   var pinWidth = 40;
   var pinHeight = 40;
+
   for (var i = 0; i < generateAdverts(8).length; i++) {
     var newPinElement = document.createElement('div');
     newPinElement.className = 'pin';
-    newPinElement.innerHTML = '<img>';
     newPinElement.setAttribute('style', 'left: ' + (generateAdverts(8)[i].location.x - pinWidth / 2) + 'px; top: ' + (generateAdverts(8)[i].location.y - pinHeight) + 'px');
-    newPinElement.querySelector('img').setAttribute('src', generateAdverts(8)[i].author.avatar);
-    newPinElement.querySelector('img').setAttribute('width', String(pinWidth));
-    newPinElement.querySelector('img').setAttribute('height', String(pinHeight));
-    newPinElement.querySelector('img').className = 'rounded';
+    newPinElement.innerHTML = '<img src="' + generateAdverts(8)[i].author.avatar + '" class="rounded" width="' + pinWidth + '" height="' + pinHeight + '">';
     fragment.appendChild(newPinElement);
   }
   pinMapElement.appendChild(fragment);
+}
+
+function createFeatures(array, createdElement) {
+  for (var i = 0; i < array.length; i++) {
+    var newFeatureElement = '<span class="feature__image feature__image--' + array[i] + '"></span>';
+    createdElement.querySelector('.lodge__features').insertAdjacentHTML('beforeend', newFeatureElement);
+  }
 }
 
 function createLodgeElement(advert) {
@@ -94,7 +98,8 @@ function createLodgeElement(advert) {
   var lodgeElement = lodgeTemplate.cloneNode(true);
   lodgeElement.querySelector('.lodge__title').textContent = advert.offer.title;
   lodgeElement.querySelector('.lodge__address').textContent = advert.offer.address;
-  lodgeElement.querySelector('.lodge__price').textContent = advert.offer.price + '&#x20bd;/ночь';
+  lodgeElement.querySelector('.lodge__price').textContent = advert.offer.price + String.fromCharCode(8381) + '/ночь';
+
 
   if (advert.offer.type === 'flat') {
     lodgeElement.querySelector('.lodge__type').textContent = 'Квартира';
@@ -107,10 +112,7 @@ function createLodgeElement(advert) {
   lodgeElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + advert.offer.guests + ' гостей в ' + advert.offer.rooms + ' комнатах';
   lodgeElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
 
-  for (var i = 0; i < advert.offer.features.length; i++) {
-    var newFeatureElement = '<span class="feature__image feature__image--' + advert.offer.features[i] + '"></span>';
-    lodgeElement.querySelector('.lodge__features').insertAdjacentHTML('beforeend', newFeatureElement);
-  }
+  createFeatures(advert.offer.features, lodgeElement);
 
   lodgeElement.querySelector('.lodge__description').textContent = advert.offer.description;
 
