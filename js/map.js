@@ -1,5 +1,45 @@
 'use strict';
 
+var OFFER_TITLES = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
+
+var OFFER_TYPES = [
+  'flat',
+  'house',
+  'bungalo'
+];
+
+var CHECKINS_OR_CHECKOUTS = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
+
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var dialogPanels = document.querySelectorAll('.dialog__panel');
+var pinElements = document.querySelectorAll('.pin');
+var activeElement = null;
+var dialog = document.querySelector('.dialog');
+var dialogClose = dialog.querySelector('.dialog__close');
+
 function getRandomInteger(min, max) {
   var rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
@@ -7,37 +47,6 @@ function getRandomInteger(min, max) {
 }
 
 function generateAdverts(advertsCount) {
-  var OFFER_TITLES = [
-    'Большая уютная квартира',
-    'Маленькая неуютная квартира',
-    'Огромный прекрасный дворец',
-    'Маленький ужасный дворец',
-    'Красивый гостевой домик',
-    'Некрасивый негостеприимный домик',
-    'Уютное бунгало далеко от моря',
-    'Неуютное бунгало по колено в воде'
-  ];
-
-  var OFFER_TYPES = [
-    'flat',
-    'house',
-    'bungalo'
-  ];
-
-  var CHECKINS_OR_CHECKOUTS = [
-    '12:00',
-    '13:00',
-    '14:00'
-  ];
-
-  var FEATURES = [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ];
 
   var adverts = [];
 
@@ -121,11 +130,70 @@ function createLodgeElement(advert) {
   return lodgeElement;
 }
 
-function switchDialog(advert) {
-  var dialogPanels = document.querySelectorAll('.dialog__panel');
-  document.querySelector('#offer-dialog').removeChild(dialogPanels[0]);
-  document.querySelector('#offer-dialog').appendChild(createLodgeElement(advert));
+function switchDialog(pin) {
+  var dialogPanel = dialog.querySelector('.dialog__panel');
+  dialog.removeChild(dialogPanel);
+  if (pin === pinElements[0]) {
+    dialog.appendChild(dialogPanels[0]);
+  } else {
+    dialog.appendChild(createLodgeElement(generateAdverts(8)[pinElements.indexOf(pin) - 1]));
+  }
 }
 
 appendPins();
-switchDialog(generateAdverts(8)[0]);
+
+function onDialogEscPress(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeDialog();
+  }
+}
+
+function openDialog(evt) {
+  dialog.classList.remove('hidden');
+  if (activeElement) {
+    activeElement.classList.remove('pin--active');
+  }
+
+  activeElement = evt.currentTarget;
+  activeElement.classList.add('pin--active');
+  switchDialog(activeElement);
+  document.addEventListener('keydown', onDialogEscPress);
+}
+
+function closeDialog() {
+  dialog.classList.add('hidden');
+  if (activeElement) {
+    activeElement.classList.remove('pin--active');
+  }
+  document.removeEventListener('keydown', onDialogEscPress);
+}
+
+function onPinClick(evt) {
+  openDialog(evt);
+}
+
+function onPinEnterPress(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openDialog(evt);
+  }
+}
+
+function onDialogCloseClick() {
+  closeDialog();
+}
+
+function onDialogCloseEnterPress(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closeDialog();
+  }
+}
+
+for (var i = 0; i < pinElements.length; i++) {
+  pinElements[i].querySelector('img').setAttribute('tabindex', '0');
+  pinElements[i].addEventListener('click', onPinClick);
+  pinElements[i].addEventListener('keydown', onPinEnterPress);
+}
+
+dialogClose.setAttribute('tabindex', '0');
+dialogClose.addEventListener('click', onDialogCloseClick);
+dialogClose.addEventListener('keydown', onDialogCloseEnterPress);
