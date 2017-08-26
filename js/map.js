@@ -46,6 +46,7 @@ function getRandomInteger(min, max) {
   return rand;
 }
 
+// Эта функция создает массив объектов с информацией об объявлениях.
 function generateAdverts(advertsCount) {
 
   var adverts = [];
@@ -79,6 +80,7 @@ function generateAdverts(advertsCount) {
   return adverts;
 }
 
+// Функция создает новые метки - то есть блоки с классом .pin - для объявлений adverts (см. выше )- и добавляет их в блок tokyo__pin-map.
 function appendPins() {
   var pinMapElement = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
@@ -95,6 +97,7 @@ function appendPins() {
   pinMapElement.appendChild(fragment);
 }
 
+// Функция создает список доступных удобств для каждой карточки объявления. Вызывается из функции ниже.
 function createFeatures(array, createdElement) {
   for (var i = 0; i < array.length; i++) {
     var newFeatureElement = '<span class="feature__image feature__image--' + array[i] + '"></span>';
@@ -102,6 +105,7 @@ function createFeatures(array, createdElement) {
   }
 }
 
+// Функция на основе шаблона и массива с данными об объявлениях определяет, из чего будут состоять карточки объявлений.
 function createLodgeElement(advert) {
   var lodgeTemplate = document.querySelector('#lodge-template').content;
   var lodgeElement = lodgeTemplate.cloneNode(true);
@@ -130,6 +134,24 @@ function createLodgeElement(advert) {
   return lodgeElement;
 }
 
+/* Думаю, что карточка объявления - это блок .dialog__panel.
+Блок dialogPanels[0] - это карточка объявления, которое было с самого начала. Ей соответствует .pin.pin__main.
+Пинов (включая .pin.pin__main.) теперь на один больше (1 + 8), чем мы создали новых объявлений (объектов в массиве с инфой об объявлении).
+Объявления созданы функцией generateAdverts(advertsCount) (см. выше). Это не блоки в HTML, а просто информация.
+Для каждого пина после главного нужна своя карточка - свой блок .dialog__panel.
+Она может быть создана на основе шаблона функцией createLodgeElement(advert) (см. выше).
+Здесь advert - это generateAdverts(advertsCount)[i].
+Каждому элементу в массиве generateAdverts(advertsCount)[i] соответствует свой блок .dialog__panel (карточка).
+Как соотнести каждый пин после первого (главного) и каждую карточку?
+Массив пинов на один элемент длиннее, чем массив объектов с инфой об объявлении.
+Поэтому я решила, что надо создавать функцией createLodgeElement карточку с информацией того объявления,
+чей индекс на единицу меньше индекса пина.
+Отсюда запись: generateAdverts(8)[pinElements.indexOf(pin) - 1])
+Но я делаю что-то не так.
+Ниже я пытаюсь вызвать эту функцию switchDialog(pin) в функции openDialog(evt) - которую потом передаю в обработчкик событий.
+Но, возможно, запись switchDialog(activeElement) некорректна. Или что-то еще.
+Наверное, можно и короче, и проще - и чтобы работало. Но не знаю как.*/
+
 function switchDialog(pin) {
   var dialogPanel = dialog.querySelector('.dialog__panel');
   dialog.removeChild(dialogPanel);
@@ -142,14 +164,19 @@ function switchDialog(pin) {
 
 appendPins();
 
+// Функция назначает закрытие диалога (сокрытие блока .dialog__panel) на клавишу esc
 function onDialogEscPress(evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closeDialog();
   }
 }
 
+/* Функция показывает блок .dialog__panel.
+Назначает активным элементом новый пин (на котором событие).
+Вызывает функцию switchDialog, чтобы показать актуальную для данного пина карточку объявления.
+(Должна это делать).
+Добавляет обработчик нажатия esc.*/
 function openDialog(evt) {
-  dialog.classList.remove('hidden');
   if (activeElement) {
     activeElement.classList.remove('pin--active');
   }
@@ -157,9 +184,13 @@ function openDialog(evt) {
   activeElement = evt.currentTarget;
   activeElement.classList.add('pin--active');
   switchDialog(activeElement);
+  dialog.classList.remove('hidden');
   document.addEventListener('keydown', onDialogEscPress);
 }
 
+/* Функция скрывает блок .dialog__panel.
+Дезактивирует активный элемент.
+Удаляет обработчик нажатия esc.*/
 function closeDialog() {
   dialog.classList.add('hidden');
   if (activeElement) {
@@ -168,26 +199,33 @@ function closeDialog() {
   document.removeEventListener('keydown', onDialogEscPress);
 }
 
+/* Функция для передачи в обработчик клика.
+??? Надо ли здесь передавать evt в обоих случаях? У меня было только внутри - в openDialog - но eslint сказал, что evt - не определен.*/
 function onPinClick(evt) {
   openDialog(evt);
 }
 
+/* Функция для передачи в обработчик нажатия клавиши.
+??? Надо ли здесь передавать evt в обоих случаях? У меня было только внутри - в openDialog - но eslint сказал, что evt - не определен.*/
 function onPinEnterPress(evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openDialog(evt);
   }
 }
 
+// Функция для передачи в обработчик клика по крестику.
 function onDialogCloseClick() {
   closeDialog();
 }
 
+// Функция для передачи в обработчик нажатия enter, когда крестик в фокусе.
 function onDialogCloseEnterPress(evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closeDialog();
   }
 }
 
+// Добавляю атрибут tabindex (так можно?), вешаю обработчики.
 for (var i = 0; i < pinElements.length; i++) {
   pinElements[i].querySelector('img').setAttribute('tabindex', '0');
   pinElements[i].addEventListener('click', onPinClick);
