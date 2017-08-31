@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ENTER_KEYCODE = 13;
   var form = document.forms[1];
 
   function setTheSameTime(evt) {
@@ -104,8 +103,8 @@
 
 
   function submitHandler(evt) {
-    if (evt.button === 0 || evt.keyCode === ENTER_KEYCODE) {
-      doWhenSending(evt);
+    if (window.util.actionCanStart(evt)) {
+      doWhenSending();
     }
   }
 

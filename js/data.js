@@ -8,7 +8,6 @@
   }
 
   function getPlaceTitle(index) {
-    // список заголовков
     var placeTitles = [
       'Большая уютная квартира',
       'Маленькая неуютная квартира',

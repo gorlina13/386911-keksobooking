@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-
   function createPinsFragment(adverts) {
     var fragment = document.createDocumentFragment();
 
@@ -40,21 +37,13 @@
     });
   }
 
-  function dialogCanOpen(evt) {
-    return evt.button === 0 || evt.keyCode === ENTER_KEYCODE;
-  }
-
-  function dialogCanClose(evt) {
-    return evt.button === 0 || evt.keyCode === ENTER_KEYCODE || evt.keyCode === ESC_KEYCODE;
-  }
-
   function dialogOpenHandler(evt) {
     var pin = evt.currentTarget;
     var setOfAds = pin.adverts;
     var index = pin.dataset.adNumber;
     var allPins = pin.parentNode.querySelectorAll('.pin--active');
 
-    if (dialogCanOpen(evt)) {
+    if (window.util.actionCanStart(evt)) {
       makePinsInactive(allPins);
       makePinActive(pin);
       window.cards.showAdDialog(setOfAds[index]);
@@ -67,7 +56,7 @@
       document.querySelector('.tokyo__pin-map').appendChild(pinsFragment);
     },
     dialogCloseHandler: function (evt) {
-      if (dialogCanClose(evt)) {
+      if (window.util.elementCanClose(evt)) {
         document.querySelector('.dialog').classList.add('hidden');
         document.querySelector('.pin--active').classList.remove('pin--active');
       }
