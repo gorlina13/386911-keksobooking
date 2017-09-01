@@ -43,7 +43,7 @@
     var index = pin.dataset.adNumber;
     var allPins = pin.parentNode.querySelectorAll('.pin--active');
 
-    if (window.util.actionCanStart(evt)) {
+    if (window.util.canActionStart(evt)) {
       makePinsInactive(allPins);
       makePinActive(pin);
       window.cards.showAdDialog(setOfAds[index]);
@@ -56,7 +56,7 @@
       document.querySelector('.tokyo__pin-map').appendChild(pinsFragment);
     },
     dialogCloseHandler: function (evt) {
-      if (window.util.elementCanClose(evt)) {
+      if (window.util.canElementClose(evt)) {
         document.querySelector('.dialog').classList.add('hidden');
         document.querySelector('.pin--active').classList.remove('pin--active');
       }

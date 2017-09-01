@@ -30,7 +30,8 @@
     var priceValue = Number(priceInput.value);
 
     if (evt.target === typeSelect) {
-      priceInput.setAttribute('min', minPrices[typeIndex]);
+      priceInput.min = minPrices[typeIndex];
+      priceInput.placeholder = minPrices[typeIndex];
     } else {
       if (priceValue < minPrices[0]) {
         typeSelect.value = types[1];
@@ -52,6 +53,9 @@
     setMinPrice(evt);
   }
 
+  /* Этот код не будет работать, когда у capacitySelect нет атрибута multiple.
+  ОК, multiple и не нужен.
+  Но как тогда реализовать соответствие: 3 комнаты — «для 2-х, 1-го или 3-х гостей»?*/
   function roomsChangeHandler() {
     var roomsSelect = form.elements.rooms;
     var capacitySelect = form.elements.capacity;
@@ -103,7 +107,7 @@
 
 
   function submitHandler(evt) {
-    if (window.util.actionCanStart(evt)) {
+    if (window.util.canActionStart(evt)) {
       doWhenSending();
     }
   }

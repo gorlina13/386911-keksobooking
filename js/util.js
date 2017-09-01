@@ -5,10 +5,10 @@
   var ENTER_KEYCODE = 13;
 
   window.util = {
-    actionCanStart: function (evt) {
+    canActionStart: function (evt) {
       return evt.button === 0 || evt.keyCode === ENTER_KEYCODE;
     },
-    elementCanClose: function (evt) {
+    canElementClose: function (evt) {
       return evt.button === 0 || evt.keyCode === ENTER_KEYCODE || evt.keyCode === ESC_KEYCODE;
     }
   };
