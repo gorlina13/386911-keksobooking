@@ -57,10 +57,10 @@
     var capacitySelect = form.elements.capacity;
     var capacityOptions = capacitySelect.querySelectorAll('option');
     capacitySelect.selectedIndex = -1;
-    for (var i = capacityOptions.length - 1; i >= 0 ; i--) {
-        var option = capacityOptions[i];
-        option.classList.add('hidden');
-      }
+    for (var i = capacityOptions.length - 1; i >= 0; i--) {
+      var option = capacityOptions[i];
+      option.classList.add('hidden');
+    }
     switch (roomsSelect.value) {
       case '100':
         capacityOptions[3].classList.remove('hidden');
