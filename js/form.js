@@ -13,11 +13,11 @@
     }
   }
 
-  function timeinChangeHandler(evt) {
+  function onTimeinChange(evt) {
     setTheSameTime(evt);
   }
 
-  function timeoutChangeHandler(evt) {
+  function onTimeoutChange(evt) {
     setTheSameTime(evt);
   }
 
@@ -31,13 +31,12 @@
 
     if (evt.target === typeSelect) {
       priceInput.min = minPrices[typeIndex];
-      priceInput.placeholder = minPrices[typeIndex];
     } else {
       if (priceValue < minPrices[0]) {
         typeSelect.value = types[1];
-      } else if (priceValue <= minPrices[2]) {
+      } else if (priceValue < minPrices[2]) {
         typeSelect.value = types[0];
-      } else if (priceValue <= minPrices[3]) {
+      } else if (priceValue < minPrices[3]) {
         typeSelect.value = types[2];
       } else {
         typeSelect.value = types[3];
@@ -45,47 +44,45 @@
     }
   }
 
-  function typeChangeHandler(evt) {
+  function onTypeChange(evt) {
     setMinPrice(evt);
   }
 
-  function priceInputHandler(evt) {
+  function onPriceInput(evt) {
     setMinPrice(evt);
   }
 
-  /* Этот код не будет работать, когда у capacitySelect нет атрибута multiple.
-  ОК, multiple и не нужен.
-  Но как тогда реализовать соответствие: 3 комнаты — «для 2-х, 1-го или 3-х гостей»?*/
-  function roomsChangeHandler() {
+  function onRoomsChange() {
     var roomsSelect = form.elements.rooms;
     var capacitySelect = form.elements.capacity;
+    var capacityOptions = capacitySelect.querySelectorAll('option');
+    capacitySelect.selectedIndex = -1;
+    for (var i = capacityOptions.length - 1; i >= 0; i--) {
+      var option = capacityOptions[i];
+      option.classList.add('hidden');
+    }
     switch (roomsSelect.value) {
       case '100':
-        capacitySelect.options[3].selected = true;
-        capacitySelect.options[0].selected = false;
-        capacitySelect.options[1].selected = false;
-        capacitySelect.options[2].selected = false;
+        capacityOptions[3].classList.remove('hidden');
+        capacitySelect.selectedIndex = 3;
         break;
 
       case '3':
-        capacitySelect.options[3].selected = false;
-        capacitySelect.options[0].selected = true;
-        capacitySelect.options[1].selected = true;
-        capacitySelect.options[2].selected = true;
+        capacityOptions[0].classList.remove('hidden');
+        capacityOptions[1].classList.remove('hidden');
+        capacityOptions[2].classList.remove('hidden');
+        capacitySelect.selectedIndex = 0;
         break;
 
       case '2':
-        capacitySelect.options[3].selected = false;
-        capacitySelect.options[0].selected = false;
-        capacitySelect.options[1].selected = true;
-        capacitySelect.options[2].selected = true;
+        capacityOptions[1].classList.remove('hidden');
+        capacityOptions[2].classList.remove('hidden');
+        capacitySelect.selectedIndex = 1;
         break;
 
       default:
-        capacitySelect.options[3].selected = false;
-        capacitySelect.options[0].selected = false;
-        capacitySelect.options[1].selected = false;
-        capacitySelect.options[2].selected = true;
+        capacityOptions[2].classList.remove('hidden');
+        capacitySelect.selectedIndex = 2;
     }
   }
 
@@ -106,20 +103,20 @@
   }
 
 
-  function submitHandler(evt) {
+  function onSubmit(evt) {
     if (window.util.canActionStart(evt)) {
       doWhenSending();
     }
   }
 
   function handleForm() {
-    document.querySelector('#timein').addEventListener('change', timeinChangeHandler);
-    document.querySelector('#timeout').addEventListener('change', timeoutChangeHandler);
-    document.querySelector('#type').addEventListener('change', typeChangeHandler);
-    document.querySelector('#price').addEventListener('input', priceInputHandler);
-    document.querySelector('#room_number').addEventListener('change', roomsChangeHandler);
-    document.querySelector('.form__submit').addEventListener('click', submitHandler);
-    document.querySelector('.form__submit').addEventListener('keydown', submitHandler);
+    document.querySelector('#timein').addEventListener('change', onTimeinChange);
+    document.querySelector('#timeout').addEventListener('change', onTimeoutChange);
+    document.querySelector('#type').addEventListener('change', onTypeChange);
+    document.querySelector('#price').addEventListener('input', onPriceInput);
+    document.querySelector('#room_number').addEventListener('change', onRoomsChange);
+    document.querySelector('.form__submit').addEventListener('click', onSubmit);
+    document.querySelector('.form__submit').addEventListener('keydown', onSubmit);
   }
 
   handleForm();

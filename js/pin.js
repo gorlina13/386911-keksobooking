@@ -11,8 +11,8 @@
       pin.style.top = adverts[i].location.y + 'px';
       pin.setAttribute('tabindex', 0);
       pin.setAttribute('data-ad-number', i);
-      pin.addEventListener('click', dialogOpenHandler);
-      pin.addEventListener('keypress', dialogOpenHandler);
+      pin.addEventListener('click', onDialogOpen);
+      pin.addEventListener('keypress', onDialogOpen);
       pin.adverts = adverts;
 
       var pinAvatar = document.createElement('img');
@@ -37,7 +37,7 @@
     });
   }
 
-  function dialogOpenHandler(evt) {
+  function onDialogOpen(evt) {
     var pin = evt.currentTarget;
     var setOfAds = pin.adverts;
     var index = pin.dataset.adNumber;
@@ -55,7 +55,7 @@
       var pinsFragment = createPinsFragment(setOfAds);
       document.querySelector('.tokyo__pin-map').appendChild(pinsFragment);
     },
-    dialogCloseHandler: function (evt) {
+    onDialogClose: function (evt) {
       if (window.util.canElementClose(evt)) {
         document.querySelector('.dialog').classList.add('hidden');
         document.querySelector('.pin--active').classList.remove('pin--active');
