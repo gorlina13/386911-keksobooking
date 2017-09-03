@@ -13,7 +13,6 @@
   initializeAdvert(8);
 
   var mainPin = document.querySelector('.pin__main');
-  var mainPinImg = mainPin.querySelector('img');
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -44,10 +43,10 @@
       };
 
       var mainPinAreaCoords = {
-        xMin: (mapBorders.xMin - mainPinImg.width / 2),
-        xMax: (mapBorders.xMax - mainPinImg.width / 2),
-        yMin: (mapBorders.yMin - mainPinImg.height),
-        yMax: (mapBorders.yMax - mainPinImg.height)
+        xMin: (mapBorders.xMin - mainPin.style.width / 2),
+        xMax: (mapBorders.xMax - mainPin.style.width / 2),
+        yMin: (mapBorders.yMin - mainPin.style.height),
+        yMax: (mapBorders.yMax - mainPin.style.height)
       };
 
       var addressCoords = {};
@@ -59,7 +58,7 @@
 
       if ((currentCoords.x >= mainPinAreaCoords.xMin) && (currentCoords.x <= mainPinAreaCoords.xMax)) {
         mainPin.style.left = currentCoords.x + 'px';
-        addressCoords.x = currentCoords.x + mainPinImg.width / 2;
+        addressCoords.x = currentCoords.x + mainPin.style.width / 2;
       } else if (currentCoords.x < mainPinAreaCoords.xMin) {
         addressCoords.x = mapBorders.xMin;
       } else {
@@ -68,7 +67,7 @@
 
       if ((currentCoords.y >= mainPinAreaCoords.yMin) && (currentCoords.y <= mainPinAreaCoords.yMax)) {
         mainPin.style.top = currentCoords.y + 'px';
-        addressCoords.y = currentCoords.y + mainPinImg.height;
+        addressCoords.y = currentCoords.y + mainPin.style.height;
       } else if (currentCoords.y < mainPinAreaCoords.yMin) {
         addressCoords.y = mapBorders.yMin;
       } else {
