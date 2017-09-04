@@ -3,17 +3,17 @@
 (function () {
   var form = document.forms[1];
 
-  function syncSelectsValues(evt, elementOne, elementTwo, arrayOne, arrayTwo) {
-    if (evt.target === elementOne) {
-      elementTwo.value = arrayTwo[arrayOne.indexOf(elementOne.value)];
+  function syncSelectsValues(evt, startElement, endElement, startArray, endArray) {
+    if (evt.target === startElement) {
+      endElement.value = endArray[startArray.indexOf(startElement.value)];
     } else {
-      elementOne.value = arrayOne[arrayTwo.indexOf(elementTwo.value)];
+      startElement.value = startArray[endArray.indexOf(endElement.value)];
     }
   }
 
-  function syncValueWithMin(evt, elementOne, elementTwo, arrayOne, arrayTwo) {
-    if (evt.target === elementOne) {
-      elementTwo.min = arrayTwo[arrayOne.indexOf(elementOne.value)];
+  function syncValueWithMin(evt, startElement, endElement, startArray, endArray) {
+    if (evt.target === startElement) {
+      endElement.min = endArray[startArray.indexOf(startElement.value)];
     }
   }
 
@@ -24,9 +24,9 @@
     var priceInput = form.elements.price;
     var priceValue = Number(priceInput.value);
 
-    if (evt.target === typeSelect) {
-      window.synchronizeFields(evt, typeSelect, priceInput, types, minPrices, syncValueWithMin);
-    } else {
+    window.synchronizeFields(evt, typeSelect, priceInput, types, minPrices, syncValueWithMin);
+
+    if (evt.target === priceInput) {
       if (priceValue < minPrices[0]) {
         typeSelect.value = types[1];
       } else if (priceValue < minPrices[2]) {

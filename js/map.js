@@ -42,16 +42,16 @@
         yMax: 500
       };
 
+      var mainPinStyle = getComputedStyle(mainPin);
+
       var mainPinAreaCoords = {
-        xMin: (mapBorders.xMin - mainPin.style.width / 2),
-        xMax: (mapBorders.xMax - mainPin.style.width / 2),
-        yMin: (mapBorders.yMin - mainPin.style.height),
-        yMax: (mapBorders.yMax - mainPin.style.height)
+        xMin: (mapBorders.xMin - parseInt(mainPinStyle.width, 10) / 2),
+        xMax: (mapBorders.xMax - parseInt(mainPinStyle.width, 10) / 2),
+        yMin: (mapBorders.yMin - parseInt(mainPinStyle.height, 10)),
+        yMax: (mapBorders.yMax - parseInt(mainPinStyle.height, 10))
       };
 
       var addressCoords = {};
-
-      var mainPinStyle = getComputedStyle(mainPin);
 
       startCoords = {
         x: moveEvt.clientX,
