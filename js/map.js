@@ -60,7 +60,6 @@
 
       if ((currentCoords.x >= mainPinAreaCoords.xMin) && (currentCoords.x <= mainPinAreaCoords.xMax)) {
         mainPin.style.left = currentCoords.x + 'px';
-        // addressCoords.x = currentCoords.x + mainPin.style.width / 2;
         addressCoords.x = currentCoords.x + Math.round(parseInt(mainPinStyle.width, 10) / 2);
       } else if (currentCoords.x < mainPinAreaCoords.xMin) {
         addressCoords.x = mapBorders.xMin;
@@ -70,7 +69,6 @@
 
       if ((currentCoords.y >= mainPinAreaCoords.yMin) && (currentCoords.y <= mainPinAreaCoords.yMax)) {
         mainPin.style.top = currentCoords.y + 'px';
-        // addressCoords.y = currentCoords.y + mainPin.style.height;
         addressCoords.y = currentCoords.y + parseInt(mainPinStyle.height, 10);
       } else if (currentCoords.y < mainPinAreaCoords.yMin) {
         addressCoords.y = mapBorders.yMin;
