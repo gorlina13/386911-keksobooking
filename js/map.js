@@ -42,11 +42,13 @@
         yMax: 500
       };
 
+      var mainPinStyle = getComputedStyle(mainPin);
+
       var mainPinAreaCoords = {
-        xMin: (mapBorders.xMin - mainPin.style.width / 2),
-        xMax: (mapBorders.xMax - mainPin.style.width / 2),
-        yMin: (mapBorders.yMin - mainPin.style.height),
-        yMax: (mapBorders.yMax - mainPin.style.height)
+        xMin: (mapBorders.xMin - parseInt(mainPinStyle.width, 10) / 2),
+        xMax: (mapBorders.xMax - parseInt(mainPinStyle.width, 10) / 2),
+        yMin: (mapBorders.yMin - parseInt(mainPinStyle.height, 10)),
+        yMax: (mapBorders.yMax - parseInt(mainPinStyle.height, 10))
       };
 
       var addressCoords = {};
@@ -58,7 +60,7 @@
 
       if ((currentCoords.x >= mainPinAreaCoords.xMin) && (currentCoords.x <= mainPinAreaCoords.xMax)) {
         mainPin.style.left = currentCoords.x + 'px';
-        addressCoords.x = currentCoords.x + mainPin.style.width / 2;
+        addressCoords.x = currentCoords.x + Math.round(parseInt(mainPinStyle.width, 10) / 2);
       } else if (currentCoords.x < mainPinAreaCoords.xMin) {
         addressCoords.x = mapBorders.xMin;
       } else {
@@ -67,7 +69,7 @@
 
       if ((currentCoords.y >= mainPinAreaCoords.yMin) && (currentCoords.y <= mainPinAreaCoords.yMax)) {
         mainPin.style.top = currentCoords.y + 'px';
-        addressCoords.y = currentCoords.y + mainPin.style.height;
+        addressCoords.y = currentCoords.y + parseInt(mainPinStyle.height, 10);
       } else if (currentCoords.y < mainPinAreaCoords.yMin) {
         addressCoords.y = mapBorders.yMin;
       } else {

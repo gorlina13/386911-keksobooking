@@ -46,7 +46,7 @@
     if (window.util.canActionStart(evt)) {
       makePinsInactive(allPins);
       makePinActive(pin);
-      window.cards.showAdDialog(setOfAds[index]);
+      window.showCard(setOfAds[index]);
     }
   }
 
