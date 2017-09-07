@@ -94,6 +94,13 @@
     if (window.util.canActionStart(evt)) {
       doWhenSending();
     }
+    evt.preventDefault();
+    window.backend.save(new FormData(form), function () {
+      /* здесь должно быть действие
+      при успешной загрузке данных на сервер,
+      сброс значений на значения по умолчанию*/
+
+    }, window.util.errorHandler);
   }
 
   function handleForm() {
@@ -123,8 +130,7 @@
     document.querySelector('#type').addEventListener('change', onTypeChange);
     document.querySelector('#price').addEventListener('input', onPriceInput);
     document.querySelector('#room_number').addEventListener('change', onRoomsChange);
-    document.querySelector('.form__submit').addEventListener('click', onSubmit);
-    document.querySelector('.form__submit').addEventListener('keydown', onSubmit);
+    form.addEventListener('submit', onSubmit);
   }
 
   handleForm();

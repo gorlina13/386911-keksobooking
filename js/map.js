@@ -1,8 +1,7 @@
 'use strict';
 
 (function () {
-  function initializeAdvert(count) {
-    var adverts = window.data.generateAdverts(count);
+  function loadHandler(adverts) {
     window.pin.showPins(adverts);
     document.querySelector('.dialog').classList.add('hidden');
     document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
@@ -10,7 +9,7 @@
     document.addEventListener('keydown', window.pin.onDialogClose);
   }
 
-  initializeAdvert(8);
+  window.backend.load(loadHandler, window.util.errorHandler);
 
   var mainPin = document.querySelector('.pin__main');
 
