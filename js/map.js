@@ -17,7 +17,7 @@
 
   window.backend.load(loadHandler, window.util.errorHandler);
 
-  /*window.map = {
+  /* window.map = {
     initializeAdverts: function (adverts) {
     window.pin.showPins(adverts);
     document.querySelector('.dialog').classList.add('hidden');

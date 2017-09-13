@@ -10,7 +10,7 @@ var wizard = {
 
 /* А хотела сделать, чтобы здесь форма с фильтрами подобным образом возвращала объект, у которого можно подписаться на каждый "change"*/
 
-/*(function () {
+/* (function () {
 
   var setOfFilters = {
     onTypeChange: function (type) {},
