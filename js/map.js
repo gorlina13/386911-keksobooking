@@ -1,6 +1,12 @@
 'use strict';
 
 (function () {
+
+  /* Функция изначальной отрисовки пинов - при получении данных с сервера.
+  Эта ли функция должна вызываться функцией перерисовки пинов после фильтровки?
+  Тогда ее надо экспортировать наружу из модуля (см. ниже window.map).
+  Но я не разобралась, как будет происходить перерисовка.
+  */
   function loadHandler(adverts) {
     window.pin.showPins(adverts);
     document.querySelector('.dialog').classList.add('hidden');
@@ -10,6 +16,16 @@
   }
 
   window.backend.load(loadHandler, window.util.errorHandler);
+
+  /*window.map = {
+    initializeAdverts: function (adverts) {
+    window.pin.showPins(adverts);
+    document.querySelector('.dialog').classList.add('hidden');
+    document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
+    document.querySelector('.dialog__close').addEventListener('keydown', window.pin.onDialogClose);
+    document.addEventListener('keydown', window.pin.onDialogClose);
+    }
+  };*/
 
   var mainPin = document.querySelector('.pin__main');
 
@@ -35,10 +51,10 @@
       };
 
       var mapBorders = {
-        xMin: 300,
-        xMax: 900,
-        yMin: 100,
-        yMax: 500
+        xMin: 0,
+        xMax: document.querySelector('.tokyo').querySelector('img').width,
+        yMin: 200,
+        yMax: document.querySelector('.tokyo').querySelector('img').height
       };
 
       var mainPinStyle = getComputedStyle(mainPin);

@@ -73,6 +73,7 @@
     }
   }
 
+  /* Функция из прежнего кода (до работы с бэкендом). В данный момент не работает*/
   function checkForm(formElements) {
     for (var i = 0; i < formElements.length; i++) {
 
@@ -82,6 +83,7 @@
     }
   }
 
+  /* Функция из прежнего кода (до работы с бэкендом). В данный момент не работает*/
   function doWhenSending() {
     var allInputs = form.querySelectorAll('input');
     var allSelects = form.querySelectorAll('select');
@@ -96,7 +98,9 @@
     }
     evt.preventDefault();
     window.backend.save(new FormData(form), function () {
-      /* здесь должно быть действие при успешной загрузке данных на сервер, сброс значений на значения по умолчанию*/
+      /* Здесь, по условиям задания 20, должно быть действие при успешной загрузке данных на сервер.*/
+      /* А что при этом должно происходить? Что сюда записать?*/
+      /*Это долг из задания 20 (Личный проект: надо подкачаться)*/
 
     }, window.util.errorHandler);
   }
