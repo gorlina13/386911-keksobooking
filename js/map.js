@@ -2,6 +2,7 @@
 
 (function () {
   function loadHandler(adverts) {
+    window.dataArray = adverts;
     window.pin.showPins(adverts);
     document.querySelector('.dialog').classList.add('hidden');
     document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
@@ -35,10 +36,10 @@
       };
 
       var mapBorders = {
-        xMin: 300,
-        xMax: 900,
-        yMin: 100,
-        yMax: 500
+        xMin: 0,
+        xMax: document.querySelector('.tokyo').querySelector('img').width,
+        yMin: 200,
+        yMax: document.querySelector('.tokyo').querySelector('img').height
       };
 
       var mainPinStyle = getComputedStyle(mainPin);
@@ -88,4 +89,11 @@
     document.addEventListener('mousemove', onMainPinMouseMove);
     document.addEventListener('mouseup', onMainPinMouseUp);
   });
+
+  var tokyoFilter = document.querySelector('.tokyo__filters-container');
+  var tokyoFilterForm = document.querySelector('.tokyo__filters');
+  tokyoFilter.addEventListener('change', function () {
+    window.filter.filterPins(window.dataArray, tokyoFilterForm);
+  });
 })();
+
