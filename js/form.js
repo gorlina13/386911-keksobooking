@@ -129,9 +129,9 @@
 
     timein.addEventListener('change', onTimeinChange);
     timeout.addEventListener('change', onTimeoutChange);
-    document.querySelector('#type').addEventListener('change', onTypeChange);
-    document.querySelector('#price').addEventListener('input', onPriceInput);
-    document.querySelector('#room_number').addEventListener('change', onRoomsChange);
+    type.addEventListener('change', onTypeChange);
+    price.addEventListener('input', onPriceInput);
+    rooms.addEventListener('change', onRoomsChange);
     form.addEventListener('submit', onSubmit);
   }
 
