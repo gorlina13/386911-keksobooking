@@ -27,7 +27,6 @@
     return placeTypesEn[index];
   }
 
-  // Генерирует массив строковых значений, взятых случайным образом из начального набора
   function getPlaceFeatures() {
     var result = [];
     var featuresList = ['wifi', 'dishwasher', 'parking', 'washer',
@@ -51,7 +50,6 @@
       };
       return translate[englishType];
     },
-    // Создание массива объектов, описывающих объявления
     generateAdverts: function (advertsCount) {
       var adverts = [];
 
@@ -77,7 +75,6 @@
             y: getRandomNumber(100, 500)
           }
         };
-        // адрес квартиры
         adverts[i].offer.address = adverts[i].location.x + ', ' + adverts[i].location.y;
       }
 

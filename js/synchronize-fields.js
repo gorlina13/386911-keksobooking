@@ -1,7 +1,9 @@
 'use strict';
 
 (function () {
-  window.synchronizeFields = function (evt, startElement, endElement, startArray, endArray, action) {
-    action(evt, startElement, endElement, startArray, endArray);
+  window.synchronizeFields = function (unchange, change, unchangeValues, changeValues, synchronize) {
+    var unchangeValueIndex = unchangeValues.indexOf(unchange.value);
+    var syncValue = changeValues[unchangeValueIndex];
+    synchronize(change, syncValue);
   };
 })();

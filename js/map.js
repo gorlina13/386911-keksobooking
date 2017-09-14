@@ -1,13 +1,8 @@
 'use strict';
 
 (function () {
-
-  /* Функция изначальной отрисовки пинов - при получении данных с сервера.
-  Эта ли функция должна вызываться функцией перерисовки пинов после фильтровки?
-  Тогда ее надо экспортировать наружу из модуля (см. ниже window.map).
-  Но я не разобралась, как будет происходить перерисовка.
-  */
   function loadHandler(adverts) {
+    window.dataArray = adverts;
     window.pin.showPins(adverts);
     document.querySelector('.dialog').classList.add('hidden');
     document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
@@ -16,16 +11,6 @@
   }
 
   window.backend.load(loadHandler, window.util.errorHandler);
-
-  /* window.map = {
-    initializeAdverts: function (adverts) {
-    window.pin.showPins(adverts);
-    document.querySelector('.dialog').classList.add('hidden');
-    document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
-    document.querySelector('.dialog__close').addEventListener('keydown', window.pin.onDialogClose);
-    document.addEventListener('keydown', window.pin.onDialogClose);
-    }
-  };*/
 
   var mainPin = document.querySelector('.pin__main');
 
@@ -104,4 +89,11 @@
     document.addEventListener('mousemove', onMainPinMouseMove);
     document.addEventListener('mouseup', onMainPinMouseUp);
   });
+
+  var tokyoFilter = document.querySelector('.tokyo__filters-container');
+  var tokyoFilterForm = document.querySelector('.tokyo__filters');
+  tokyoFilter.addEventListener('change', function () {
+    window.filter.filterPins(window.dataArray, tokyoFilterForm);
+  });
 })();
+
