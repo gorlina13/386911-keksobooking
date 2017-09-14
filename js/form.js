@@ -78,7 +78,7 @@
     price.value = 1000;
   }
 
-  function onSubmit(evt) {
+  function onSubmit() {
     window.backend.save(new FormData(form), resetForm, window.util.errorHandler);
   }
 
