@@ -3,7 +3,16 @@
 (function () {
   var form = document.forms[1];
   var title = form.elements.title;
+  var type = form.elements.type;
   var price = form.elements.price;
+  var rooms = form.elements.rooms;
+  var capacity = form.elements.capacity;
+  var description = form.elements.description;
+  var address = form.elements.address;
+  var timein = form.elements.timein;
+  var timeout = form.elements.timeout;
+  var features = form.elements.features;
+
 
   function syncElementsValues(element, value) {
     element.value = value;
@@ -71,29 +80,43 @@
   function resetForm() {
     title.minLength = 30;
     title.maxLength = 100;
+    title.required = true;
+    title.value = '';
+    type.value = 'flat';
     price.required = true;
     price.type = 'number';
     price.max = 1000000;
     price.min = 0;
     price.value = 1000;
+    rooms.value = 1;
+    capacity.value = 3;
+    description.value = '';
+    address.value = 'x: 638, y: 394';
+    address.required = true;
+    document.querySelector('.pin__main').style.left = '';
+    document.querySelector('.pin__main').style.top = '';
+    timein.value = '12:00';
+    timeout.value = '12:00';
+    [].forEach.call(features, function (it) {
+      it.checked = false;
+    });
   }
 
-  function onSubmit() {
+  function onSubmit(evt) {
+    evt.preventDefault();
     window.backend.save(new FormData(form), resetForm, window.util.errorHandler);
   }
 
   function handleForm() {
-    var timeinSelect = form.elements.timein;
-    var timeoutSelect = form.elements.timeout;
     var checkins = ['12:00', '13:00', '14:00'];
     var checkouts = ['12:00', '13:00', '14:00'];
 
     function onTimeinChange() {
-      window.synchronizeFields(timeinSelect, timeoutSelect, checkins, checkouts, syncElementsValues);
+      window.synchronizeFields(timein, timeout, checkins, checkouts, syncElementsValues);
     }
 
     function onTimeoutChange() {
-      window.synchronizeFields(timeoutSelect, timeinSelect, checkouts, checkins, syncElementsValues);
+      window.synchronizeFields(timeout, timein, checkouts, checkins, syncElementsValues);
     }
 
     function onTypeChange(evt) {
@@ -104,8 +127,8 @@
       setMinPrice(evt);
     }
 
-    timeinSelect.addEventListener('change', onTimeinChange);
-    timeoutSelect.addEventListener('change', onTimeoutChange);
+    timein.addEventListener('change', onTimeinChange);
+    timeout.addEventListener('change', onTimeoutChange);
     document.querySelector('#type').addEventListener('change', onTypeChange);
     document.querySelector('#price').addEventListener('input', onPriceInput);
     document.querySelector('#room_number').addEventListener('change', onRoomsChange);
