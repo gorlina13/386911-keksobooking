@@ -1,18 +1,23 @@
 'use strict';
 
 (function () {
+
+  var TOKYO_LEFT = 0;
+  var TOKYO_TOP = 200;
+  var mainPin = document.querySelector('.pin__main');
+
   function loadHandler(adverts) {
+    var dialog = document.querySelector('.dialog');
+    var dialogClose = dialog.querySelector('.dialog__close');
     window.dataArray = adverts;
     window.pin.showPins(adverts);
-    document.querySelector('.dialog').classList.add('hidden');
-    document.querySelector('.dialog__close').addEventListener('click', window.pin.onDialogClose);
-    document.querySelector('.dialog__close').addEventListener('keydown', window.pin.onDialogClose);
+    dialog.classList.add('hidden');
+    dialogClose.addEventListener('click', window.pin.onDialogClose);
+    dialogClose.addEventListener('keydown', window.pin.onDialogClose);
     document.addEventListener('keydown', window.pin.onDialogClose);
   }
 
   window.backend.load(loadHandler, window.util.errorHandler);
-
-  var mainPin = document.querySelector('.pin__main');
 
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -23,7 +28,11 @@
     };
 
     function onMainPinMouseMove(moveEvt) {
+
       moveEvt.preventDefault();
+
+      var tokyoImg = document.querySelector('.tokyo > img');
+      var address = document.forms[1].elements.address;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -36,19 +45,22 @@
       };
 
       var mapBorders = {
-        xMin: 0,
-        xMax: document.querySelector('.tokyo').querySelector('img').width,
-        yMin: 200,
-        yMax: document.querySelector('.tokyo').querySelector('img').height
+        xMin: TOKYO_LEFT,
+        xMax: tokyoImg.width,
+        yMin: TOKYO_TOP,
+        yMax: tokyoImg.height
       };
 
       var mainPinStyle = getComputedStyle(mainPin);
+      var mainPinHalfWidth = parseInt(mainPinStyle.width, 10) / 2;
+      var mainPinHeight = parseInt(mainPinStyle.height, 10);
+
 
       var mainPinAreaCoords = {
-        xMin: (mapBorders.xMin - parseInt(mainPinStyle.width, 10) / 2),
-        xMax: (mapBorders.xMax - parseInt(mainPinStyle.width, 10) / 2),
-        yMin: (mapBorders.yMin - parseInt(mainPinStyle.height, 10)),
-        yMax: (mapBorders.yMax - parseInt(mainPinStyle.height, 10))
+        xMin: (mapBorders.xMin - mainPinHalfWidth),
+        xMax: (mapBorders.xMax - mainPinHalfWidth),
+        yMin: (mapBorders.yMin - mainPinHeight),
+        yMax: (mapBorders.yMax - mainPinHeight)
       };
 
       var addressCoords = {};
@@ -60,7 +72,7 @@
 
       if ((currentCoords.x >= mainPinAreaCoords.xMin) && (currentCoords.x <= mainPinAreaCoords.xMax)) {
         mainPin.style.left = currentCoords.x + 'px';
-        addressCoords.x = currentCoords.x + Math.round(parseInt(mainPinStyle.width, 10) / 2);
+        addressCoords.x = currentCoords.x + Math.round(mainPinHalfWidth);
       } else if (currentCoords.x < mainPinAreaCoords.xMin) {
         addressCoords.x = mapBorders.xMin;
       } else {
@@ -69,14 +81,14 @@
 
       if ((currentCoords.y >= mainPinAreaCoords.yMin) && (currentCoords.y <= mainPinAreaCoords.yMax)) {
         mainPin.style.top = currentCoords.y + 'px';
-        addressCoords.y = currentCoords.y + parseInt(mainPinStyle.height, 10);
+        addressCoords.y = currentCoords.y + mainPinHeight;
       } else if (currentCoords.y < mainPinAreaCoords.yMin) {
         addressCoords.y = mapBorders.yMin;
       } else {
         addressCoords.y = mapBorders.yMax;
       }
 
-      document.querySelector('#address').value = 'x: ' + addressCoords.x + ', y: ' + addressCoords.y;
+      address.value = 'x: ' + addressCoords.x + ', y: ' + addressCoords.y;
     }
 
     function onMainPinMouseUp(upEvt) {
@@ -96,4 +108,3 @@
     window.filter.filterPins(window.dataArray, tokyoFilterForm);
   });
 })();
-
