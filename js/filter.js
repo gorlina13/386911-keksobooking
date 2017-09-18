@@ -1,66 +1,72 @@
 'use strict';
 
 (function () {
-  var avatarBlock = document.querySelector('.tokyo__pin-map');
-
-  var filterPins = function (array, filter) {
-    var doFilter1 = sortByType(array, filter['housing_type']['value'], 'type');
-    var doFilter2 = getByPrice(doFilter1, filter['housing_price']['value'], 'price');
-    var doFilter3 = sortArray(doFilter2, filter['housing_room-number']['value'], 'rooms');
-    var doFilter4 = sortArray(doFilter3, filter['housing_guests-number']['value'], 'guests');
+  function filterPins(array, filter) {
+    var filterResults1 = sortByType(array, filter['housing_type'].value, 'type');
+    var filterResults2 = getByPrice(filterResults1, filter['housing_price'].value, 'price');
+    var filterResults3 = sortArray(filterResults2, filter['housing_room-number'].value, 'rooms');
+    var filterResults4 = sortArray(filterResults3, filter['housing_guests-number'].value, 'guests');
+    [].forEach.call(filter['feature'], function (item) {
+      var featuresFilterResults = sortByFeature(filterResults4, item.checked, 'features', item.value);
+      filterResults4 = featuresFilterResults;
+      return filterResults4;
+    });
     clearMap();
-    window.debounce(window.pin.showPins(doFilter4), doFilter4, avatarBlock);
-  };
 
-  var sortArray = function (array, data, check) {
-    var filterRezult = null;
+    window.debounce(window.pin.showPins, filterResults4);
+  }
+
+  function sortArray(array, data, check) {
+    var filterRezults = null;
     var tmpArray = array.filter(function (item) {
-      if (data === 'any') {
-        filterRezult = (item.offer[check] !== false);
-      } else {
-        filterRezult = (item.offer[check] === Number(data));
-      }
-      return filterRezult;
+      filterRezults = (data === 'any') ? (item.offer[check] !== false) : (item.offer[check] === Number(data));
+      return filterRezults;
     });
     return tmpArray;
-  };
+  }
 
-  var sortByType = function (array, data, check) {
-    var filterRezult = null;
+  function sortByType(array, data, check) {
+    var filterRezults = null;
     var tmpArray = array.filter(function (item) {
-      if (data === 'any') {
-        filterRezult = (item.offer[check] !== false);
-      } else {
-        filterRezult = (item.offer[check] === data);
-      }
-      return filterRezult;
+      filterRezults = (data === 'any') ? (item.offer[check] !== false) : (item.offer[check] === data);
+      return filterRezults;
     });
     return tmpArray;
-  };
+  }
 
-  var getByPrice = function (array, data, check) {
-    var filterRezult = null;
+  function getByPrice(array, data, check) {
+    var filterRezults = null;
     var tmpArray = array.filter(function (item) {
       if (data === 'any') {
-        filterRezult = item.offer[check] !== false;
+        filterRezults = (item.offer[check] !== false);
       } else if (data === 'middle') {
-        filterRezult = item.offer[check] <= 50000 && item.offer[check] >= 10000;
+        filterRezults = (item.offer[check] <= 50000) && (item.offer[check] >= 10000);
       } else if (data === 'low') {
-        filterRezult = item.offer[check] <= 10000;
+        filterRezults = (item.offer[check] <= 10000);
       } else if (data === 'high') {
-        filterRezult = item.offer[check] >= 50000;
+        filterRezults = (item.offer[check] >= 50000);
       }
-      return filterRezult;
+      return filterRezults;
     });
     return tmpArray;
-  };
+  }
 
-  var clearMap = function () {
-    var pins = avatarBlock.querySelectorAll('.pin:not(.pin__main)');
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].parentNode.removeChild(pins[i]);
-    }
-  };
+  function sortByFeature(array, data, check, checkItem) {
+    var filterRezults = null;
+    var tmpArray = array.filter(function (item) {
+      filterRezults = data ? (item.offer[check].indexOf(checkItem) >= 0) : (item.offer[check] !== false);
+      return filterRezults;
+    });
+    return tmpArray;
+  }
+
+  function clearMap() {
+    var tokioPinMap = document.querySelector('.tokyo__pin-map');
+    var pins = tokioPinMap.querySelectorAll('.pin:not(.pin__main)');
+    [].forEach.call(pins, function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
 
   window.filter = {
     filterPins: filterPins

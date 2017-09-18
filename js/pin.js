@@ -1,30 +1,37 @@
 'use strict';
 
 (function () {
+
   function createPinsFragment(adverts) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < adverts.length; i++) {
+    adverts.forEach(function (item, i, array) {
       var pin = document.createElement('div');
       pin.className = 'pin';
-      pin.style.left = adverts[i].location.x + 'px';
-      pin.style.top = adverts[i].location.y + 'px';
+      pin.style.left = item.location.x + 'px';
+      pin.style.top = item.location.y + 'px';
       pin.setAttribute('tabindex', 0);
       pin.setAttribute('data-ad-number', i);
       pin.addEventListener('click', onDialogOpen);
       pin.addEventListener('keypress', onDialogOpen);
-      pin.adverts = adverts;
+      pin.adverts = array;
 
       var pinAvatar = document.createElement('img');
-      pinAvatar.src = adverts[i].author.avatar;
+      pinAvatar.src = item.author.avatar;
       pinAvatar.className = 'rounded';
       pinAvatar.width = '40';
       pinAvatar.height = '40';
 
       pin.appendChild(pinAvatar);
       fragment.appendChild(pin);
-    }
+    });
+
     return fragment;
+  }
+
+  function getAllPins() {
+    var allPins = document.querySelectorAll('.pin');
+    return allPins;
   }
 
   function makePinActive(pin) {
@@ -41,10 +48,9 @@
     var pin = evt.currentTarget;
     var setOfAds = pin.adverts;
     var index = pin.dataset.adNumber;
-    var allPins = pin.parentNode.querySelectorAll('.pin--active');
 
     if (window.util.canActionStart(evt)) {
-      makePinsInactive(allPins);
+      makePinsInactive(getAllPins());
       makePinActive(pin);
       window.showCard(setOfAds[index]);
     }
@@ -52,13 +58,15 @@
 
   window.pin = {
     showPins: function (setOfAds) {
+      var tokioPinMap = document.querySelector('.tokyo__pin-map');
       var pinsFragment = createPinsFragment(setOfAds);
-      document.querySelector('.tokyo__pin-map').appendChild(pinsFragment);
+      tokioPinMap.appendChild(pinsFragment);
     },
     onDialogClose: function (evt) {
+      var dialog = document.querySelector('.dialog');
       if (window.util.canElementClose(evt)) {
-        document.querySelector('.dialog').classList.add('hidden');
-        document.querySelector('.pin--active').classList.remove('pin--active');
+        dialog.classList.add('hidden');
+        makePinsInactive(getAllPins());
       }
     }
   };
