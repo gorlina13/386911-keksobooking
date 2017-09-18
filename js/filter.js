@@ -11,20 +11,15 @@
       filterResults4 = featuresFilterResults;
       return filterResults4;
     });
-    var filterResults5 = filterResults4;
     clearMap();
 
-    window.debounce(window.pin.showPins, filterResults5);
+    window.debounce(window.pin.showPins, filterResults4);
   }
 
   function sortArray(array, data, check) {
     var filterRezults = null;
     var tmpArray = array.filter(function (item) {
-      if (data === 'any') {
-        filterRezults = (item.offer[check] !== false);
-      } else {
-        filterRezults = (item.offer[check] === Number(data));
-      }
+      filterRezults = (data === 'any') ? (item.offer[check] !== false) : (item.offer[check] === Number(data));
       return filterRezults;
     });
     return tmpArray;
@@ -33,11 +28,7 @@
   function sortByType(array, data, check) {
     var filterRezults = null;
     var tmpArray = array.filter(function (item) {
-      if (data === 'any') {
-        filterRezults = (item.offer[check] !== false);
-      } else {
-        filterRezults = (item.offer[check] === data);
-      }
+      filterRezults = (data === 'any') ? (item.offer[check] !== false) : (item.offer[check] === data);
       return filterRezults;
     });
     return tmpArray;
@@ -63,11 +54,7 @@
   function sortByFeature(array, data, check, checkItem) {
     var filterRezults = null;
     var tmpArray = array.filter(function (item) {
-      if (data) {
-        filterRezults = (item.offer[check].indexOf(checkItem) >= 0);
-      } else {
-        filterRezults = (item.offer[check] !== false);
-      }
+      filterRezults = data ? (item.offer[check].indexOf(checkItem) >= 0) : (item.offer[check] !== false);
       return filterRezults;
     });
     return tmpArray;

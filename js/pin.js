@@ -29,6 +29,11 @@
     return fragment;
   }
 
+  function getAllPins() {
+    var allPins = document.querySelectorAll('.pin');
+    return allPins;
+  }
+
   function makePinActive(pin) {
     pin.classList.add('pin--active');
   }
@@ -43,10 +48,9 @@
     var pin = evt.currentTarget;
     var setOfAds = pin.adverts;
     var index = pin.dataset.adNumber;
-    var allPins = pin.parentNode.querySelectorAll('.pin');
 
     if (window.util.canActionStart(evt)) {
-      makePinsInactive(allPins);
+      makePinsInactive(getAllPins());
       makePinActive(pin);
       window.showCard(setOfAds[index]);
     }
@@ -60,12 +64,9 @@
     },
     onDialogClose: function (evt) {
       var dialog = document.querySelector('.dialog');
-      var activePin = document.querySelector('.pin--active');
-      // var allPins = document.querySelectorAll('.pin');
       if (window.util.canElementClose(evt)) {
         dialog.classList.add('hidden');
-        // makePinsInactive(allPins);
-        activePin.classList.remove('pin--active');
+        makePinsInactive(getAllPins());
       }
     }
   };

@@ -1,8 +1,9 @@
 'use strict';
-// нет магических значений?
+
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var ERROR_MESSAGE_FONT_SIZE = '30px';
 
   window.util = {
     canActionStart: function (evt) {
@@ -23,7 +24,7 @@
       node.style.position = 'absolute';
       node.style.left = '0';
       node.style.right = '0';
-      node.style.fontSize = '30px';
+      node.style.fontSize = ERROR_MESSAGE_FONT_SIZE;
 
       node.textContent = errorMessage;
       document.body.insertAdjacentElement('afterbegin', node);
