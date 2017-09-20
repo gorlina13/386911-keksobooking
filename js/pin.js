@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   function createPinsFragment(adverts) {
     var fragment = document.createDocumentFragment();
 
@@ -58,14 +57,13 @@
 
   window.pin = {
     showPins: function (setOfAds) {
-      var tokioPinMap = document.querySelector('.tokyo__pin-map');
+      var pinMap = window.map.mainPin.parentNode;
       var pinsFragment = createPinsFragment(setOfAds);
-      tokioPinMap.appendChild(pinsFragment);
+      pinMap.appendChild(pinsFragment);
     },
     onDialogClose: function (evt) {
-      var dialog = document.querySelector('.dialog');
       if (window.util.canElementClose(evt)) {
-        dialog.classList.add('hidden');
+        window.map.dialog.classList.add('hidden');
         makePinsInactive(getAllPins());
       }
     }

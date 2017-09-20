@@ -75,13 +75,12 @@
   }
 
   function resetForm() {
-    var mainPin = document.querySelector('.pin__main');
     form.reset();
     [].forEach.call(capacityOptions, function (item) {
       item.classList.remove('hidden');
     });
-    mainPin.style.left = EMPTY_VALUE;
-    mainPin.style.top = EMPTY_VALUE;
+    window.map.mainPin.style.left = EMPTY_VALUE;
+    window.map.mainPin.style.top = EMPTY_VALUE;
   }
 
   function onSubmit(evt) {

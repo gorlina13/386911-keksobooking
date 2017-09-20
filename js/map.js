@@ -5,9 +5,29 @@
   var TOKYO_LEFT = 0;
   var TOKYO_TOP = 200;
   var mainPin = document.querySelector('.pin__main');
+  var dialog = document.querySelector('.dialog');
+  var address = document.forms[1].elements.address;
+  var tokyoImg = document.querySelector('.tokyo > img');
+  var mainPinStyle = getComputedStyle(mainPin);
+  var mainPinHalfWidth = parseInt(mainPinStyle.width, 10) / 2;
+  var mainPinRoundHalfWidth = Math.round(mainPinHalfWidth);
+  var mainPinHeight = parseInt(mainPinStyle.height, 10);
+
+  var mapBorders = {
+    xMin: TOKYO_LEFT,
+    xMax: tokyoImg.width,
+    yMin: TOKYO_TOP,
+    yMax: tokyoImg.height
+  };
+
+  var mainPinAreaCoords = {
+    xMin: (mapBorders.xMin - mainPinHalfWidth),
+    xMax: (mapBorders.xMax - mainPinHalfWidth),
+    yMin: (mapBorders.yMin - mainPinHeight),
+    yMax: (mapBorders.yMax - mainPinHeight)
+  };
 
   function loadHandler(adverts) {
-    var dialog = document.querySelector('.dialog');
     var dialogClose = dialog.querySelector('.dialog__close');
     window.dataArray = adverts;
     window.pin.showPins(adverts);
@@ -31,9 +51,6 @@
 
       moveEvt.preventDefault();
 
-      var tokyoImg = document.querySelector('.tokyo > img');
-      var address = document.forms[1].elements.address;
-
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -42,25 +59,6 @@
       var currentCoords = {
         x: mainPin.offsetLeft - shift.x,
         y: mainPin.offsetTop - shift.y
-      };
-
-      var mapBorders = {
-        xMin: TOKYO_LEFT,
-        xMax: tokyoImg.width,
-        yMin: TOKYO_TOP,
-        yMax: tokyoImg.height
-      };
-
-      var mainPinStyle = getComputedStyle(mainPin);
-      var mainPinHalfWidth = parseInt(mainPinStyle.width, 10) / 2;
-      var mainPinHeight = parseInt(mainPinStyle.height, 10);
-
-
-      var mainPinAreaCoords = {
-        xMin: (mapBorders.xMin - mainPinHalfWidth),
-        xMax: (mapBorders.xMax - mainPinHalfWidth),
-        yMin: (mapBorders.yMin - mainPinHeight),
-        yMax: (mapBorders.yMax - mainPinHeight)
       };
 
       var addressCoords = {};
@@ -72,7 +70,7 @@
 
       if ((currentCoords.x >= mainPinAreaCoords.xMin) && (currentCoords.x <= mainPinAreaCoords.xMax)) {
         mainPin.style.left = currentCoords.x + 'px';
-        addressCoords.x = currentCoords.x + Math.round(mainPinHalfWidth);
+        addressCoords.x = currentCoords.x + mainPinRoundHalfWidth;
       } else if (currentCoords.x < mainPinAreaCoords.xMin) {
         addressCoords.x = mapBorders.xMin;
       } else {
@@ -107,4 +105,9 @@
   tokyoFilter.addEventListener('change', function () {
     window.filter.filterPins(window.dataArray, tokyoFilterForm);
   });
+
+  window.map = {
+    mainPin: mainPin,
+    dialog: dialog
+  };
 })();
